@@ -1,0 +1,211 @@
+# APK verification
+
+## Unit tests
+tests=74 failures=0 errors=0 (from 3 report file(s))
+tests="36" skipped="0" failures="0" errors="0"
+tests="9" skipped="0" failures="0" errors="0"
+tests="29" skipped="0" failures="0" errors="0"
+File: tachiyomi-all.mangaball-enhanced-v1.6.27.apk  (84783 bytes)
+
+## Signing certificate
+V2 Signer: certificate DN: CN=MangaBall Enhanced, OU=Extensions, O=GitHub, C=US
+V2 Signer: certificate SHA-256 digest: 639d9d5554beb2b95d4e95d27a4b7f66bd7e7f7344d92cd50d2646760a39094e
+V2 Signer: certificate SHA-1 digest: 8d3e738ca20813701580ce2668167bf8f15e8632
+V2 Signer: certificate MD5 digest: 2e51bb0a7396f408c6fdaeb2772babd5
+WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/version-control-info.textproto not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+
+## Application info
+package: name='eu.kanade.tachiyomi.extension.all.mangaball' versionCode='27' versionName='1.6.27' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'
+targetSdkVersion:'35'
+application-label:'Tachiyomi: MangaBall Enhanced'
+application-icon-640:'res/o-.png'
+application: label='Tachiyomi: MangaBall Enhanced' icon='res/o-.png'
+
+## Full manifest (a merged <uses-feature tachiyomi.extension /> is REQUIRED for the app to list the extension)
+N: android=http://schemas.android.com/apk/res/android (line=2)
+  E: manifest (line=2)
+    A: http://schemas.android.com/apk/res/android:versionCode(0x0101021b)=27
+    A: http://schemas.android.com/apk/res/android:versionName(0x0101021c)="1.6.27" (Raw: "1.6.27")
+    A: http://schemas.android.com/apk/res/android:compileSdkVersion(0x01010572)=35
+    A: http://schemas.android.com/apk/res/android:compileSdkVersionCodename(0x01010573)="15" (Raw: "15")
+    A: package="eu.kanade.tachiyomi.extension.all.mangaball" (Raw: "eu.kanade.tachiyomi.extension.all.mangaball")
+    A: platformBuildVersionCode=35
+    A: platformBuildVersionName=15
+      E: uses-sdk (line=7)
+        A: http://schemas.android.com/apk/res/android:minSdkVersion(0x0101020c)=23
+        A: http://schemas.android.com/apk/res/android:targetSdkVersion(0x01010270)=35
+      E: uses-feature (line=11)
+        A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension" (Raw: "tachiyomi.extension")
+      E: application (line=13)
+        A: http://schemas.android.com/apk/res/android:label(0x01010001)="Tachiyomi: MangaBall Enhanced" (Raw: "Tachiyomi: MangaBall Enhanced")
+        A: http://schemas.android.com/apk/res/android:icon(0x01010002)=@0x7f010000
+        A: http://schemas.android.com/apk/res/android:allowBackup(0x01010280)=false
+        A: http://schemas.android.com/apk/res/android:supportsRtl(0x010103af)=true
+        A: http://schemas.android.com/apk/res/android:extractNativeLibs(0x010104ea)=false
+        A: http://schemas.android.com/apk/res/android:roundIcon(0x0101052c)=@0x7f010000
+          E: meta-data (line=22)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.name" (Raw: "tachiyomix.name")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="MangaBall Enhanced" (Raw: "MangaBall Enhanced")
+          E: meta-data (line=25)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.contentWarning" (Raw: "tachiyomix.contentWarning")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=0
+          E: meta-data (line=28)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.extensionLib" (Raw: "tachiyomix.extensionLib")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=1.6
+          E: meta-data (line=33)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.class" (Raw: "tachiyomi.extension.class")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=".MangaBallFactory" (Raw: ".MangaBallFactory")
+          E: meta-data (line=36)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.factory" (Raw: "tachiyomi.extension.factory")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="eu.kanade.tachiyomi.extension.all.mangaball.MangaBallFactory" (Raw: "eu.kanade.tachiyomi.extension.all.mangaball.MangaBallFactory")
+          E: meta-data (line=41)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.name" (Raw: "tachiyomi.extension.name")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="MangaBall Enhanced" (Raw: "MangaBall Enhanced")
+          E: meta-data (line=44)
+
+## Feature lines reported by aapt badging
+feature-group: label=''
+  uses-feature: name='tachiyomi.extension'
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+
+## Manifest meta-data
+          E: meta-data (line=22)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.name" (Raw: "tachiyomix.name")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="MangaBall Enhanced" (Raw: "MangaBall Enhanced")
+          E: meta-data (line=25)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.contentWarning" (Raw: "tachiyomix.contentWarning")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=0
+          E: meta-data (line=28)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomix.extensionLib" (Raw: "tachiyomix.extensionLib")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=1.6
+          E: meta-data (line=33)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.class" (Raw: "tachiyomi.extension.class")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=".MangaBallFactory" (Raw: ".MangaBallFactory")
+          E: meta-data (line=36)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.factory" (Raw: "tachiyomi.extension.factory")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="eu.kanade.tachiyomi.extension.all.mangaball.MangaBallFactory" (Raw: "eu.kanade.tachiyomi.extension.all.mangaball.MangaBallFactory")
+          E: meta-data (line=41)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.name" (Raw: "tachiyomi.extension.name")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)="MangaBall Enhanced" (Raw: "MangaBall Enhanced")
+          E: meta-data (line=44)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.nsfw" (Raw: "tachiyomi.extension.nsfw")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=0
+          E: meta-data (line=47)
+            A: http://schemas.android.com/apk/res/android:name(0x01010003)="tachiyomi.extension.lib" (Raw: "tachiyomi.extension.lib")
+            A: http://schemas.android.com/apk/res/android:value(0x01010024)=1.6
+
+## Classes DEFINED in the APK (dex class_defs - the classes actually shipped)
+classes.dex: 90 classes defined
+
+classes under eu/kanade/tachiyomi/extension/all/mangaball (90):
+  eu/kanade/tachiyomi/extension/all/mangaball/AdultFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/ContentFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/DemographicFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/ExtraKeywordFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/FocusGenreFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/FocusTagFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/FocusTagFilter$special$$inlined$sortedBy$1
+  eu/kanade/tachiyomi/extension/all/mangaball/FormatFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/GenreFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/HttpStatusException
+  eu/kanade/tachiyomi/extension/all/mangaball/LanguageFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/LanguageStateFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallApiKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallApiKt$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallApiKt$$ExternalSyntheticLambda1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallApiKt$$ExternalSyntheticLambda2
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallCatalog
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallCatalog$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallCatalog$all$$inlined$sortedBy$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallCatalog$preferences_delegate$lambda$0$$inlined$get$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallCatalogKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallDiagnostics
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallDiagnostics$getPopularManga$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallDiagnostics$report$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallFactory
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallFactory$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallFilters
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallLanguages
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallQueryKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$$ExternalSyntheticLambda1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$compareByDescending$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$compareByDescending$2
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$compareByDescending$3
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$compareByDescending$4
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$compareByDescending$5
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$thenBy$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$thenBy$2
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$thenBy$3
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$thenBy$4
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRankingKt$rankingPermutation$$inlined$thenBy$5
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallRetryKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSearchKt
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSearchKt$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$$ExternalSyntheticApiModelOutline0
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$$ExternalSyntheticLambda1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$$ExternalSyntheticLambda2
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$fetchOrEmpty$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$fetchSearchPage$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$getMangaUpdate$2
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$getMangaUpdate$2$chapterList$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$getMangaUpdate$2$details$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$getPageList$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$jsonOf$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$loadChapters$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$loadDetails$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$loadTitleId$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$preferences_delegate$lambda$0$$inlined$get$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$probeVariants$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$refineForQuery$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSource$search$1
+  eu/kanade/tachiyomi/extension/all/mangaball/MangaBallTag
+  eu/kanade/tachiyomi/extension/all/mangaball/R
+  eu/kanade/tachiyomi/extension/all/mangaball/R$mipmap
+  eu/kanade/tachiyomi/extension/all/mangaball/RankingRow
+  eu/kanade/tachiyomi/extension/all/mangaball/RankingRow$$ExternalSyntheticBackport0
+  eu/kanade/tachiyomi/extension/all/mangaball/ResultOrderFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchOptions
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchSyntax
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchSyntax$$ExternalSyntheticLambda0
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchSyntax$$ExternalSyntheticLambda1
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchSyntax$$ExternalSyntheticLambda2
+  eu/kanade/tachiyomi/extension/all/mangaball/SearchSyntax$$ExternalSyntheticLambda3
+  eu/kanade/tachiyomi/extension/all/mangaball/SelectFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/SmartSearch
+  eu/kanade/tachiyomi/extension/all/mangaball/SmartSearch$candidateQueries$$inlined$sortedByDescending$1
+  eu/kanade/tachiyomi/extension/all/mangaball/SmartSearch$rank$$inlined$sortedByDescending$1
+  eu/kanade/tachiyomi/extension/all/mangaball/SortFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/SortFilter$Companion
+  eu/kanade/tachiyomi/extension/all/mangaball/StatusFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/TagGroup
+  eu/kanade/tachiyomi/extension/all/mangaball/TagGroup$Companion
+  eu/kanade/tachiyomi/extension/all/mangaball/TagModeFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/TagStateFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/TagStateGroup
+  eu/kanade/tachiyomi/extension/all/mangaball/ThemeFilter
+  eu/kanade/tachiyomi/extension/all/mangaball/TypeFilter
+
+OK: 90 classes, none of them from kotlin/, kotlinx/, okhttp3/, okio/, uy/, org/jsoup/, rx/, androidx/, org/jetbrains/
+
+## Archive contents
+Archive:  extension/build/outputs/apk/release/tachiyomi-all.mangaball-enhanced-v1.6.27.apk
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+       56  1981-01-01 01:01   META-INF/com/android/build/gradle/app-metadata.properties
+      120  1981-01-01 01:01   META-INF/version-control-info.textproto
+   162704  1981-01-01 01:01   classes.dex
+      626  1981-01-01 01:01   kotlin-tooling-metadata.json
+     3212  1981-01-01 01:01   AndroidManifest.xml
+     8221  1981-01-01 01:01   res/o-.png
+      568  1981-01-01 01:01   resources.arsc
+      838  1981-01-01 01:01   META-INF/CERT.SF
+     1298  1981-01-01 01:01   META-INF/CERT.RSA
+      764  1981-01-01 01:01   META-INF/MANIFEST.MF
+---------                     -------
+   178407                     10 files

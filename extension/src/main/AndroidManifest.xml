@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-sdk
+        android:minSdkVersion="23"
+        android:targetSdkVersion="35" />
+
+    <uses-feature android:name="tachiyomi.extension" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="${appName}"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true">
+
+        <!-- Meta-data read by Komikku / Mihon -->
+        <meta-data
+            android:name="tachiyomix.name"
+            android:value="MangaBall Enhanced" />
+        <meta-data
+            android:name="tachiyomix.contentWarning"
+            android:value="${nsfw}" />
+        <meta-data
+            android:name="tachiyomix.extensionLib"
+            android:value="${libVersion}" />
+
+        <!-- The factory creates one source per language -->
+        <meta-data
+            android:name="tachiyomi.extension.class"
+            android:value="${extClass}" />
+        <meta-data
+            android:name="tachiyomi.extension.factory"
+            android:value="eu.kanade.tachiyomi.extension.all.mangaball.MangaBallFactory" />
+
+        <!-- Legacy meta-data kept for older readers -->
+        <meta-data
+            android:name="tachiyomi.extension.name"
+            android:value="MangaBall Enhanced" />
+        <meta-data
+            android:name="tachiyomi.extension.nsfw"
+            android:value="${nsfw}" />
+        <meta-data
+            android:name="tachiyomi.extension.lib"
+            android:value="${libVersion}" />
+    </application>
+
+</manifest>
