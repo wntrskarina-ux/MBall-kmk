@@ -1,0 +1,268 @@
+name: Build extension
+
+on:
+  push:
+    branches:
+      - main
+      - 'arena/**'
+    # Documentation-only commits must not publish a new APK: a new versionCode also invalidates
+    # the user's one-tap "Trust" in the reader app, so it is not free.
+    paths-ignore:
+      - '**.md'
+      - 'build-info/**'
+      - 'build-logs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  EXT_VERSION_CODE: ${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Show Android SDK
+        run: |
+          if [ -z "${ANDROID_HOME:-}" ]; then echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"; fi
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          echo "sdk=$SDK"
+          ls "$SDK/build-tools" || true
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.10.2
+
+      # The keystore is stored in the repository so every release keeps the same signature.
+      # Android refuses to update an installed app whose signature changed.
+      - name: Prepare signing key
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p ci
+          if [ ! -f ci/mangaball.jks ]; then
+            echo "Generating a new signing key"
+            keytool -genkeypair -v \
+              -keystore ci/mangaball.jks \
+              -alias mangaball \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass mangaball -keypass mangaball \
+              -dname "CN=MangaBall Enhanced, OU=Extensions, O=GitHub, C=US"
+            git add -f ci/mangaball.jks
+            git commit -m "chore: add signing keystore [skip ci]"
+            git pull --rebase --autostash || true
+            git push || true
+          else
+            echo "Reusing the keystore from the repository"
+          fi
+          echo "KEYSTORE_FILE=$PWD/ci/mangaball.jks" >> "$GITHUB_ENV"
+          echo "KEYSTORE_PASSWORD=mangaball" >> "$GITHUB_ENV"
+          echo "KEY_ALIAS=mangaball" >> "$GITHUB_ENV"
+          echo "KEY_PASSWORD=mangaball" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: |
+          # pipefail: without it, `gradle | tee` hides a failure behind tee's exit status. A test
+          # source that does not even compile was published as a release that way once.
+          set -o pipefail
+          # --rerun-tasks: never take a cached/up-to-date test task, so a JUnit report always
+          # exists for the verification step below.
+          gradle :extension:testReleaseUnitTest --rerun-tasks --no-daemon --console=plain --info 2>&1 | tee test-output.log
+          grep -E "MangaBall(Logic|Search)Test|tests completed|BUILD SUCCESSFUL" test-output.log | tail -n 8 || true
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          gradle :extension:assembleRelease --no-daemon --console=plain 2>&1 | tee build-output.log
+
+      - name: Save build log on failure
+        if: failure()
+        continue-on-error: true
+        run: |
+          mkdir -p build-logs
+          {
+            echo "### test failures"
+            grep -E "FAILED|MangaBall(Logic|Search)Test" test-output.log 2>/dev/null | head -n 40 || true
+            echo
+            echo "### compiler diagnostics"
+            grep -n -E "^(e|w): " build-output.log | head -n 120 || true
+            echo
+            echo "### failure summary"
+            sed -n '/What went wrong/,/^\\* Try:/p' build-output.log | head -n 80 || true
+          } > build-logs/last-build.txt
+          git add -f build-logs/last-build.txt
+          git commit -m "chore: build log [skip ci]" || true
+          git pull --rebase --autostash || true
+          git push || true
+
+      - name: Verify APK
+        id: apk
+        if: success()
+        run: |
+          apk=$(find extension/build/outputs/apk -name "*.apk" ! -name "*unsigned*" | head -n 1)
+          if [ -z "$apk" ]; then echo "No signed APK produced"; exit 1; fi
+          echo "path=$apk" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$apk")" >> "$GITHUB_OUTPUT"
+
+          TOOLS="$(ls -d "${ANDROID_HOME:-/usr/local/lib/android/sdk}"/build-tools/* | sort -V | tail -n 1)"
+          mkdir -p build-info
+          {
+            echo "# APK verification"
+            echo
+            echo "## Unit tests"
+            xmls=$(ls extension/build/test-results/testReleaseUnitTest/*.xml 2>/dev/null || true)
+            if [ -z "$xmls" ] && [ ! -d extension/build/test-results ]; then
+              # The test step's output was cleaned up somehow - redo it here so the release is
+              # never published without evidence that the tests passed.
+              echo "!! no test results directory - running the unit tests again"
+              if ! gradle :extension:testReleaseUnitTest --rerun-tasks --no-daemon --console=plain \
+                > /tmp/test-retry.log 2>&1; then
+                echo "!! the unit tests failed on the retry - refusing to publish" | tee /dev/stderr
+                grep -n -E "^(e|w): |FAILED|tests completed" /tmp/test-retry.log | head -n 30 | tee /dev/stderr
+                exit 1
+              fi
+              xmls=$(ls extension/build/test-results/testReleaseUnitTest/*.xml 2>/dev/null || true)
+            fi
+            if [ -n "$xmls" ]; then
+              reports=$(echo "$xmls" | wc -l)
+              tests=$(grep -h -o 'tests="[0-9]*"' $xmls | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
+              failures=$(grep -h -o 'failures="[0-9]*"' $xmls | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
+              errors=$(grep -h -o 'errors="[0-9]*"' $xmls | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
+              echo "tests=$tests failures=$failures errors=$errors (from $reports report file(s))"
+              grep -h -o 'tests="[0-9]*" skipped="[0-9]*" failures="[0-9]*" errors="[0-9]*"' $xmls
+              if [ "$failures" != "0" ] || [ "$errors" != "0" ]; then
+                echo "!! unit tests failed - refusing to publish" | tee /dev/stderr
+                exit 1
+              fi
+            else
+              echo "!! WARNING: no JUnit report found, the test counts could not be verified"
+              echo "contents of extension/build/test-results (if any):"
+              ls -R extension/build/test-results 2>/dev/null | head -n 20 || true
+              echo "gradle test summary from the log:"
+              grep -E "MangaBall(Logic|Search)Test|tests completed|FAILED|FROM-CACHE" test-output.log 2>/dev/null | tail -n 20 || true
+              echo "!! FATAL: could not verify that the unit tests pass" | tee /dev/stderr
+              exit 1
+            fi
+            echo "File: $(basename "$apk")  ($(stat -c %s "$apk") bytes)"
+            echo
+            echo "## Signing certificate"
+            "$TOOLS/apksigner" verify --print-certs "$apk" | head -n 6
+            echo
+            echo "## Application info"
+            "$TOOLS/aapt2" dump badging "$apk" | grep -E "^(package|application|sdkVersion|targetSdkVersion|uses-feature)" | head -n 10
+            echo
+            echo "## Full manifest (a merged <uses-feature tachiyomi.extension /> is REQUIRED for the app to list the extension)"
+            "$TOOLS/aapt2" dump xmltree --file AndroidManifest.xml "$apk" | sed -n '1,40p'
+            echo
+            echo "## Feature lines reported by aapt badging"
+            "$TOOLS/aapt2" dump badging "$apk" | grep -i "feature" || echo "!! NO uses-feature line -- the app would NOT see this APK as an extension !!"
+            echo
+            echo "## Manifest meta-data"
+            "$TOOLS/aapt2" dump xmltree --file AndroidManifest.xml "$apk" \
+              | grep -A 2 "E: meta-data" | head -n 60
+            echo
+            echo "## Classes DEFINED in the APK (dex class_defs - the classes actually shipped)"
+            rm -rf /tmp/dexdir && mkdir -p /tmp/dexdir
+            unzip -o -q "$apk" 'classes*.dex' -d /tmp/dexdir
+            set +e
+            python3 tools/dex_classes.py /tmp/dexdir/classes*.dex \
+              --list-prefix eu/kanade/tachiyomi/extension/all/mangaball \
+              --forbid kotlin/ --forbid kotlinx/ --forbid okhttp3/ --forbid okio/ \
+              --forbid uy/ --forbid org/jsoup/ --forbid rx/ --forbid androidx/ \
+              --forbid org/jetbrains/ \
+              --require eu/kanade/tachiyomi/extension/all/mangaball/MangaBallFactory
+            dex_rc=$?
+            set -e
+            if [ "$dex_rc" = "1" ]; then
+              {
+                echo "!! FATAL: this APK bundles runtime classes that the reader app already provides."
+                echo "!! The extension class loader is parent-LAST, so the bundled copies shadow the"
+                echo "!! app's own and every suspend call fails with IncompatibleClassChangeError."
+                echo "!! Keep every library dependency compileOnly in extension/build.gradle.kts."
+              } | tee /dev/stderr
+              exit 1
+            elif [ "$dex_rc" != "0" ]; then
+              echo "!! WARNING: the dex contents could not be fully verified (exit $dex_rc) - check by hand." | tee /dev/stderr
+            fi
+            echo
+            echo "## Archive contents"
+            unzip -l "$apk" | head -n 30
+          } > build-info/apk-verification.txt
+          cat build-info/apk-verification.txt
+
+      - name: Upload APK as workflow artifact
+        if: success()
+        # GitHub's artifact service fails now and then ("Upload APK ... failed" with the build,
+        # the tests and the APK verification all green). The APK is published through a Release
+        # below anyway, so a hiccup here must not skip that release.
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: mangaball-enhanced-apk
+          path: |
+            ${{ steps.apk.outputs.path }}
+            build-info/apk-verification.txt
+
+      - name: Publish build info
+        if: success()
+        continue-on-error: true
+        run: |
+          git add -f build-info/apk-verification.txt
+          git commit -m "chore: apk verification for v1.6.${EXT_VERSION_CODE} [skip ci]" || true
+          git pull --rebase --autostash || true
+          git push || true
+
+      - name: Publish release
+        if: success()
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.6.${{ github.run_number }}
+          name: MangaBall Enhanced — v1.6.${{ github.run_number }}
+          body: |
+            Enhanced MangaBall extension for Komikku.
+
+            **Install (phone)**
+            1. Download the APK below.
+            2. Open it, and allow installs from this source if Android asks.
+            3. Open Komikku → **More → Extensions**. *MangaBall Enhanced* is listed under **Installed**
+               with the word *Untrusted* — tap the **shield ✓** button on its right, then **Trust**.
+               (Needed once per update: trust is remembered per versionCode.)
+            4. Komikku → **Browse** → pick a **MangaBall (…)** source → **Filter** to use the enhanced search.
+            5. Only see *MangaBall (Diagnostics)*? Open it — it says exactly what is wrong.
+
+            **Fixed in this build:** opening a source no longer crashes the app with
+            `java.lang.IncompatibleClassChangeError: ... does not implement interface
+            'kotlin.coroutines.Continuation'`. The APK no longer bundles the Kotlin standard
+            library, which was shadowing the app's own copy through the app's parent-last
+            extension class loader. CI now proves on every build that the APK ships no library
+            classes at all.
+
+            **What it does**
+
+            - Enhanced search with an inline query language, e.g.
+              `naruto tag:action -tag:ecchi sort:views order:desc status:ongoing pages:3`
+            - Sort by latest update, views, rating, newest or title
+            - Local ordering by genre, by tag, by tag match, by title, by views, by chapter count
+            - Include **or** exclude any genre / theme / format / content tag, with AND / OR tag logic
+            - Language include/exclude filter and an extra-keyword field
+            - Optional: hide 18+ titles, hide chapters of a specific scanlator, merge more pages per search
+
+            Full guide: see `README.md` in the repository.
+
+            Site: https://mangaball.com
+          files: ${{ steps.apk.outputs.path }}
+          make_latest: true

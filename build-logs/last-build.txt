@@ -1,0 +1,31 @@
+### test failures
+Kotlin source files: /home/runner/work/mangaball-komikku-enhanced/mangaball-komikku-enhanced/extension/src/test/kotlin/eu/kanade/tachiyomi/extension/all/mangaball/MangaBallLogicTest.kt, /home/runner/work/mangaball-komikku-enhanced/mangaball-komikku-enhanced/extension/src/test/kotlin/eu/kanade/tachiyomi/extension/all/mangaball/MangaBallSearchTest.kt
+> Task :extension:testReleaseUnitTest FAILED
+MangaBallSearchTest > equal scores keep the order the server returned FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga$default(MangaBallSearchTest.kt:20)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.equal scores keep the order the server returned(MangaBallSearchTest.kt:186)
+MangaBallSearchTest > empty result sets are returned as is FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga$default(MangaBallSearchTest.kt:20)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.empty result sets are returned as is(MangaBallSearchTest.kt:203)
+MangaBallSearchTest > relevant results come first and junk is dropped FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga$default(MangaBallSearchTest.kt:20)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.relevant results come first and junk is dropped(MangaBallSearchTest.kt:173)
+MangaBallSearchTest > alternative titles are searched too FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.alternative titles are searched too(MangaBallSearchTest.kt:104)
+MangaBallSearchTest > the reported junk list keeps only the searched title FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga$default(MangaBallSearchTest.kt:20)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.the reported junk list keeps only the searched title(MangaBallSearchTest.kt:158)
+MangaBallSearchTest > when nothing matches the servers answer is trusted FAILED
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga(MangaBallSearchTest.kt:21)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.manga$default(MangaBallSearchTest.kt:20)
+        at eu.kanade.tachiyomi.extension.all.mangaball.MangaBallSearchTest.when nothing matches the servers answer is trusted(MangaBallSearchTest.kt:196)
+BUILD FAILED in 1m 37s
+
+### compiler diagnostics
+
+### failure summary
